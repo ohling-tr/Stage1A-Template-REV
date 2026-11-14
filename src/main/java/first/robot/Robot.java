@@ -10,6 +10,7 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import first.robot.simulation.DrivetrainSim;
 import org.wpilib.drive.DifferentialDrive;
 import org.wpilib.framework.OpModeRobot;
 import org.wpilib.hardware.bus.CANPort;
@@ -40,6 +41,8 @@ public class Robot extends OpModeRobot {
 
   private final OnboardIMU imu = new OnboardIMU(MountOrientation.FLAT);
 
+  private final DrivetrainSim driveTrainSim = new DrivetrainSim(leftLeader, rightLeader);
+
   public Robot() {
     SparkMaxConfig leftConfig = new SparkMaxConfig();
     SparkMaxConfig rightConfig = new SparkMaxConfig();
@@ -61,5 +64,7 @@ public class Robot extends OpModeRobot {
   }
 
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+    driveTrainSim.periodic();
+  }
 }
