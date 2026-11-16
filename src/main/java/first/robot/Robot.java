@@ -11,6 +11,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import first.robot.simulation.DrivetrainSim;
+import first.robot.simulation.FuelSim;
+import first.robot.simulation.SingleFlywheelSim;
 import org.wpilib.drive.DifferentialDrive;
 import org.wpilib.framework.OpModeRobot;
 import org.wpilib.hardware.bus.CANPort;
@@ -43,6 +45,13 @@ public class Robot extends OpModeRobot {
 
   private final DrivetrainSim driveTrainSim = new DrivetrainSim(leftLeader, rightLeader);
 
+  public final SparkMax intakeLauncher = new SparkMax(CANPort.CAN_S0, 4, MotorType.kBrushless);
+  public final SparkMax feeder = new SparkMax(CANPort.CAN_S0, 5, MotorType.kBrushless);
+
+  private final SingleFlywheelSim intakeLaunchSim =
+      SingleFlywheelSim.forIntakeLauncher(intakeLauncher);
+  private final SingleFlywheelSim feederSim = SingleFlywheelSim.forFeeder(feeder);
+
   public Robot() {
     SparkMaxConfig leftConfig = new SparkMaxConfig();
     SparkMaxConfig rightConfig = new SparkMaxConfig();
@@ -66,5 +75,8 @@ public class Robot extends OpModeRobot {
   @Override
   public void simulationPeriodic() {
     driveTrainSim.periodic();
+    intakeLaunchSim.periodic();
+    feederSim.periodic();
+    FuelSim.periodic();
   }
 }
